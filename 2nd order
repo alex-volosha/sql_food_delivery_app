@@ -1,0 +1,7 @@
+select *
+from 
+(select a.customer_id,
+a.delivery_id,
+row_number() over (partition by a.delivery_id order by when_the_delivery_started) as order_rank
+from dsvirchevska.delivery_data as a) as subquery
+where order_rank = 2;
