@@ -1,0 +1,8 @@
+select distinct cast(when_the_delivery_started as date),
+sum(item_quantity) over (order by cast(when_the_delivery_started as date))
+from dsvirchevska.delivery_data
+order by cast(when_the_delivery_started as date);
+---- Без CAST не выполняется сортировка по дате, could you explain me why, please
+select distinct when_the_delivery_started as date,
+sum(item_quantity) over (order by when_the_delivery_started) as running_sum
+from dsvirchevska.delivery_data;
