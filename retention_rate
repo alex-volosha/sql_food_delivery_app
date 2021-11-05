@@ -1,0 +1,13 @@
+with user_activity as(
+SELECT
+customer_id, 
+date_trunc('week', when_the_jumpman_arrived_at_dropoff) as week
+from dsvirchevska.delivery_data)
+
+select previous.week, round( count(current.customer_id)/count(distinct previous.customer_id) ::numeric,2) as Retention
+from user_activity as previous
+left join user_activity as current
+on previous.customer_id = current.customer_id
+and previous.week = (current.week - interval '1 week')
+group by 1
+order by 1
