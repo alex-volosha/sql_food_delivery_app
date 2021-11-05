@@ -1,0 +1,8 @@
+select distinct date_trunc('week', when_the_jumpman_arrived_at_dropoff) as week,
+item_category_name,
+sum(item_quantity) over (order by date_trunc('week', when_the_jumpman_arrived_at_dropoff))
+as running_sum,
+sum(item_quantity) over (partition by item_category_name order by date_trunc('week', when_the_jumpman_arrived_at_dropoff)) 
+as running_sum_per_category
+from dsvirchevska.delivery_data
+order by 1,2;
