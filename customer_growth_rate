@@ -1,0 +1,15 @@
+with part_1 as (
+select 
+wau,
+week, 
+lag(wau) over (order by week) as lag_wau
+FROM
+(select count(distinct customer_id) as wau,
+date_trunc('week', when_the_jumpman_arrived_at_dropoff) as week
+from dsvirchevska.delivery_data
+group by date_trunc('week', when_the_jumpman_arrived_at_dropoff)) as subquery
+order by 2 )
+SELECT
+week,
+(wau-lag_wau)/lag_wau::numeric as growth_rate
+from part_1
